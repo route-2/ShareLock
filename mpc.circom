@@ -30,3 +30,21 @@ template MPC() {
 
     main.out <== mpc.out;
 }
+
+template Main(in, out) {
+    signal input in;
+    signal output out;
+
+    out <== in;
+}
+
+template MPC(in, out) {
+    signal input in;
+    signal output out;
+
+    out <== in;
+}
+
+template recover () {
+   
+}
