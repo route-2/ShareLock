@@ -5,11 +5,16 @@ Decimal.set({ modulo: Decimal.ROUND_FLOOR });
 Decimal.set({ crypto: true });
 Decimal.set({ precision: 1e+4 });
 Decimal.set({ toExpPos: 1000 });
+const secret = '0x'; // hexadecimal string representing the secret to be split
+const prime = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 
 function divmod(a, b, n) {
-  let aCopy = (Decimal.isDecimal(a)) ? a : Decimal(a);
-  let bCopy = (Decimal.isDecimal(b)) ? b : Decimal(b);
-  let nCopy = (Decimal.isDecimal(n)) ? n : Decimal(n);
+  let aCopy = (a instanceof Decimal) ? a : new Decimal(a);
+
+  let bCopy = (b instanceof Decimal) ? b : new Decimal(b);
+
+  let nCopy = (n instanceof Decimal) ? n : new Decimal(n);
+
   let t = Decimal('0');
   let nt = Decimal('1');
   let r = nCopy;
@@ -67,7 +72,7 @@ function split(secret, n, k, prime) {
     );
   }
 
-  if (!Decimal.isDecimal(prime) && prime.substring(0, 2) !== '0x') {
+  if (!(prime instanceof Decimal) && prime.substring(0, 2) !== '0x') {
     throw new TypeError(
       'The shamir.split() function must be called with a' +
       'String<prime> in hexadecimals that begins with 0x.'
@@ -102,6 +107,8 @@ function split(secret, n, k, prime) {
     y: share.y.toHex(),
   }));
 }
+const ans = split(secret,2,3,prime);
+console.log(ans);
 
 function lagrangeBasis(data, j) {
   // Lagrange basis evaluated at 0, i.e. L(0).
@@ -139,7 +146,16 @@ function lagrangeInterpolate(data, p) {
 
   return rest;
 }
-
+const shares = [
+  {
+    x: '1',
+    y: '0x8575b217545462627dd524246c463bdf947daacb42bee94001eb6bf490b99fd'
+  },
+  {
+    x: '2',
+    y: '0xb3e73ef2e51de0d2411d5fdd01060cfe8e05da180a5523cbee3bf36415c8816f'
+  }
+]
 function combine(shares, prime) {
   const p = Decimal(prime);
 
@@ -151,6 +167,18 @@ function combine(shares, prime) {
 
   return lagrangeInterpolate(decimalShares, p);
 }
+shares.forEach(share => {
+  share["y"] = parseInt(share["y"], 16);
+});
+
+
+const ansW = combine(shares,prime)
+
+
+secret_str = ansW.toString().substring(0, 18)
+
+
+console.log(secret_str , "combined");
 
 exports.split = split;
 exports.combine = combine;
