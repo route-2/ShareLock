@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "decimal.js": "^10.4.3",
     "dotenv": "^16.0.3"
   }
 }
