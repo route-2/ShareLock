@@ -157,6 +157,7 @@ function combine(shares, prime) {
     x: Decimal(share.x),
     y: Decimal(share.y),
   }));
+  console.log(decimalShares)
 
   return lagrangeInterpolate(decimalShares, p);
 }
