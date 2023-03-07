@@ -5,7 +5,7 @@ Decimal.set({ modulo: Decimal.ROUND_FLOOR });
 Decimal.set({ crypto: true });
 Decimal.set({ precision: 1e+4 });
 Decimal.set({ toExpPos: 1000 });
-const secret = '0x'; // hexadecimal string representing the secret to be split
+const secret = '0x6a17a7d15ace9582eee61573e9c646c2f206c707261077668e24a7802cedbe16'; // hexadecimal string representing the secret to be split
 const prime = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 
 function divmod(a, b, n) {
@@ -107,8 +107,10 @@ function split(secret, n, k, prime) {
     y: share.y.toHex(),
   }));
 }
-const ans = split(secret,2,3,prime);
+var ans = split(secret,2,2,prime);
+const combI = combine(ans,prime);
 console.log(ans);
+console.log(combI, "split + combi");
 
 function lagrangeBasis(data, j) {
   // Lagrange basis evaluated at 0, i.e. L(0).
@@ -146,16 +148,7 @@ function lagrangeInterpolate(data, p) {
 
   return rest;
 }
-const shares = [
-  {
-    x: '1',
-    y: '0x8575b217545462627dd524246c463bdf947daacb42bee94001eb6bf490b99fd'
-  },
-  {
-    x: '2',
-    y: '0xb3e73ef2e51de0d2411d5fdd01060cfe8e05da180a5523cbee3bf36415c8816f'
-  }
-]
+
 function combine(shares, prime) {
   const p = Decimal(prime);
 
@@ -167,18 +160,16 @@ function combine(shares, prime) {
 
   return lagrangeInterpolate(decimalShares, p);
 }
-shares.forEach(share => {
-  share["y"] = parseInt(share["y"], 16);
-});
 
 
-const ansW = combine(shares,prime)
+
+// const ansW = combine(shares,prime)
 
 
-secret_str = ansW.toString().substring(0, 18)
+// secret_str = ansW.toString()
 
 
-console.log(secret_str , "combined");
+// console.log(secret_str , "combined");
 
 exports.split = split;
 exports.combine = combine;
