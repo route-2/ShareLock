@@ -1,14 +1,16 @@
 pragma circom 2.1.4;
-include "../node_modules/circomlib/circuits/comparators.circom";
-include "../node_modules/circomlib/circuits/sign.circom";
-include "../node_modules/circomlib/circuits/bitify.circom";
+include "circomlib/comparators.circom";
+include "circomlib/sign.circom";
+include "circomlib/bitify.circom";
 
 
 
 template floor(v){
     var t;
+
     signal output outf;
     if(v<0){
+
        t=v +(-1);
        outf <== t;
     }
@@ -52,9 +54,10 @@ template divmod(num,den,p){
   var r = num;
   var nr = den % p;
   var tmp;
+  component res;
   component isz = IsZero();
-  component gt = GreaterThan();
-  component nt = IsNegative();
+//   component gt = GreaterThan();
+  component neg = IsNegative();
   component outd;
   while (!nr.isz) {
     var quot = floor(r / nr);
@@ -65,10 +68,18 @@ template divmod(num,den,p){
     nr = r - (quot * (nr));
       r = tmp;
   }
-  if (r.gt(1)) 
-   outd <== 0;
-     if (t.nt) t = t + n;
-  outd <== num * t % n;
+  
+  if (r > 1 ) 
+  {
+     outd <== 0;
+  }
+   
+     if (t.neg) 
+     {
+        t += n;
+        }
+        res = num * t % n;
+  outd <== res;
 }
 
 
@@ -88,7 +99,7 @@ template lagrangeInterpolate(data,p){
              
              var num = basis.outa;
              var den = basis.outb;
-             divI = divmod(num,den);
+             divI = divmod(num,den,p);
              datA = (data[i].y * divI);
 
    S = S + datA ;
