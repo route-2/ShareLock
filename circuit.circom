@@ -58,17 +58,20 @@ template divmod(num,den,p){
   component isz = IsZero();
 //   component gt = GreaterThan();
   component neg = IsNegative();
+  var quot;
   component outd;
   while (!nr.isz) {
-    var quot = floor(r / nr);
+    
+    quot === floor(r / nr);
     tmp = nt; 
+
      nt = t - (quot * (nt)); 
       t = tmp;
     tmp = nr;  
     nr = r - (quot * (nr));
       r = tmp;
   }
-  
+
   if (r > 1 ) 
   {
      outd <== 0;
@@ -76,9 +79,9 @@ template divmod(num,den,p){
    
      if (t.neg) 
      {
-        t += n;
+        t += p;
         }
-        res = num * t % n;
+        res = num * t % p;
   outd <== res;
 }
 
