@@ -49,6 +49,7 @@ template IsNegative(){
 }
 
 template divmod(num,den,p){
+
   var t = 0;
   var nt = 1;
   var r = num;

@@ -6,7 +6,7 @@ Decimal.set({ crypto: true });
 Decimal.set({ precision: 1e+4 });
 Decimal.set({ toExpPos: 1000 });
 const secret = '0x6a17a7d15ace9582eee61573e9c646c2f206c707261077668e24a7802cedbe16'; // hexadecimal string representing the secret to be split
-const prime = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+const prime = Decimal('2').pow(1111).sub(1);
 
 function divmod(a, b, n) {
   let aCopy = (a instanceof Decimal) ? a : new Decimal(a);
@@ -107,7 +107,7 @@ function split(secret, n, k, prime) {
     y: share.y.toHex(),
   }));
 }
-var ans = split(secret,2,2,prime);
+var ans = split(secret,4,3,prime);
 const combI = combine(ans,prime);
 console.log(ans);
 console.log(combI, "split + combi");
