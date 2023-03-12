@@ -92,6 +92,7 @@ template divmod(num,den,p){
 
 template lagrangeInterpolate(data,p){
    var S = 0;
+   signal input share[3];
 
    signal output oute;
    component basis;
