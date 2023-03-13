@@ -114,17 +114,35 @@ template lagrangeInterpolate(data,p){
 
   oute <== rest;
 }
-template combine (share,prime) {  
+template combine () {
+    signal input share[3][2];
+  var sharesX;
+   var sharesY; 
+    signal output secret[3][2]; 
 
-   // Declaration of signals. 
- component shares[15];
+    var  shares[3][2];
  for(var i = 0;i<3;i++)
 
  {
-    shares[i] = share;
+    sharesX = share[i][0];
+    sharesY = share[i][1];
+    shares[i][0] = sharesX;
+    
+    shares[i][1] = sharesY;
+
+    
  }
-  secret <== lagrangeInterpolate(shares, prime);
+  secret <== shares;
 }
+// component main = combine();
+
+  /* INPUT = {
+    "share":[["0","1"],["8","1"],["1","4"]]
+} */
+
+
+// secret <== lagrangeInterpolate(shares, prime);
+// }
 
 
 component main{public[share,prime]} = combine();
