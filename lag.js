@@ -27,16 +27,16 @@ function lagrangeBasis(data, j) {
     // Lagrange basis evaluated at 0, i.e. L(0).
     // You don't need to interpolate the whole polynomial to get the secret, you
     // only need the constant term.
-    let denominator = Decimal(1);
-    let numerator = Decimal(1);
-    for (let i = 0; i < data.length; i++) {
+    let denominator = 1;
+    let numerator = 1;
+    for (let i = 0; i < 4; i++) {
       
       if (data[j].x != data[i].x) {
         denominator = denominator * (data[i].x - (data[j].x));
       }
     }
   
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < 4; i++) {
       if (data[j].x != data[i].x) {
         numerator = numerator * (data[i].x);
       }
