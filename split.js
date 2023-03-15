@@ -141,6 +141,7 @@ function lagrangeInterpolate(data, p) {
 
   for (let i = 0; i < data.length; i++) {
     let basis = lagrangeBasis(data, i);
+    console.log(basis, "basis")
     S = S.add(data[i].y.times(divmod(basis.numerator, basis.denominator, p)));
   }
 
