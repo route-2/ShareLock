@@ -119,6 +119,7 @@ function lagrangeBasis(data, j) {
   let denominator = Decimal(1);
   let numerator = Decimal(1);
   for (let i = 0; i < data.length; i++) {
+    
     if (!data[j].x.equals(data[i].x)) {
       denominator = denominator.times(data[i].x.minus(data[j].x));
     }
