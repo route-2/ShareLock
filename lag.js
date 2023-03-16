@@ -19,10 +19,10 @@ const data = [
       y: '0x7f91da05b62be8ab051afc6d33f08e29e0565d4eb0e46644f9d13aaec69387b0659bedb75d7a27785cd54f4a29d9a4e8b327502698ec806d124879f2e8f5b3de7ac34d0a1e87b96331618552ca4bbc4c6f09e3b32f56eb0b1b7bcf70d0796b3f10fec95991e63379c4140e1211e81781994628683abc5b85e62d74feb80cb8a8de9d8bbe2b95201f190849'
     }
   ]
-  const j = 2;
+  const j = 0;
 
     const { numerator, denominator } = lagrangeBasis(data, j);
-    console.log(numerator,denominator, "for 2");
+    console.log(numerator,denominator, "for 0");
 function lagrangeBasis(data, j) {
     // Lagrange basis evaluated at 0, i.e. L(0).
     // You don't need to interpolate the whole polynomial to get the secret, you
@@ -41,7 +41,7 @@ function lagrangeBasis(data, j) {
         numerator = numerator * (data[i].x);
       }
     }
-  console.log(numerator,"num",denominator,"den", "for 2")
+  console.log(numerator,"num",denominator,"den", "for 0")
     return {
       numerator,
       denominator,

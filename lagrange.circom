@@ -1,5 +1,13 @@
-
 pragma circom 2.1.4;
+
+template findSqrt(in){
+   signal output out;
+   for(var i=1;i<in;i++){
+      if(i**2 == in){
+         out<==i;
+      }
+   }
+}
 
 template lagrangeBasis(data,i){
 
@@ -10,21 +18,22 @@ template lagrangeBasis(data,i){
 
     var numerator =1 ;
     var denominator = 1;
+    var flag = 0;
     
 
     for(var j=0;j<4;j++)
+
     {
-       for(var k = 0;k<2;k++)
-       {
            if (data[i][0]!=data[j][0]) 
-      {
-       
-         denominator = denominator * (data[j][0] - (data[i][0]));
-      }
+           
         
-       }
-       
+      {
+         denominator = denominator * (data[j][0] - (data[i][0]));
+         
+         
+      }
     } 
+     
     for(var j=0;j<4;j++)
     {
        for(var k = 0;k<2;k++)
@@ -40,13 +49,16 @@ template lagrangeBasis(data,i){
        }
        
     } 
-    outa<==numerator;
-    outb<==denominator; 
+   
 
-
-
+    component numroot = findSqrt(numerator);
+    
+    outa<==numroot.out;
+outb<==denominator; 
     
 }
+
+ 
 
 
 component main = lagrangeBasis([
@@ -68,7 +80,8 @@ component main = lagrangeBasis([
      0x7f91da05b62be8ab051afc6d33f08e29e0565d4eb0e46644f9d13aaec69387b0659bedb75d7a27785cd54f4a29d9a4e8b327502698ec806d124879f2e8f5b3de7ac34d0a1e87b96331618552ca4bbc4c6f09e3b32f56eb0b1b7bcf70d0796b3f10fec95991e63379c4140e1211e81781994628683abc5b85e62d74feb80cb8a8de9d8bbe2b95201f190849
      
   ]
-],2);
+],1
+);
 
 /* INPUT = {
     "data1":[
