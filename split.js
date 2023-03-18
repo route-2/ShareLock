@@ -139,10 +139,11 @@ function lagrangeBasis(data, j) {
 
 function lagrangeInterpolate(data, p) {
   let S = Decimal(0);
-
+ console.log(p,"prime")
   for (let i = 0; i < data.length; i++) {
     let basis = lagrangeBasis(data, i);
     console.log(basis, "basis")
+    console.log("divmod is",divmod(basis.numerator, basis.denominator, p),"divMod for i",i,"prime:",p)
     S = S.add(data[i].y.times(divmod(basis.numerator, basis.denominator, p)));
   }
 
