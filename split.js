@@ -6,7 +6,7 @@ Decimal.set({ crypto: true });
 Decimal.set({ precision: 1e+4 });
 Decimal.set({ toExpPos: 1000 });
 const secret = '0x6a17a7d15ace9582eee61573e9c646c2f206c707261077668e24a7802cedbe16'; // hexadecimal string representing the secret to be split
-const prime = Decimal('2').pow(1111).sub(1);
+const prime = Decimal('2').pow(333).sub(1);
 
 function divmod(a, b, n) {
   let aCopy = (a instanceof Decimal) ? a : new Decimal(a);
