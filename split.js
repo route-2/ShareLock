@@ -148,6 +148,8 @@ function lagrangeInterpolate(data, p) {
   }
 
   const rest = S.mod(p);
+  console.log(rest,"lagrange result")
+
 
   return rest;
 }
