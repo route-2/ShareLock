@@ -17,11 +17,14 @@ contract mpc {
 
   uint counter = 0;
 
-  function checkVerifier(string[] memory input) public {
+  function checkVerifier(string[] memory input) public returns (bool) {
     counter++;
     if (counter == 3) {
-      Verifier.verifyProof(input);
+      bool result = Verifier.verifyProof(input);
+       return result;
+      
     }
+   
   }
 
   modifier onlyOwner() {
