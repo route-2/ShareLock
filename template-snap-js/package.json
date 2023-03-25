@@ -51,6 +51,8 @@
     "node": ">=16.0.0"
   },
   "dependencies": {
-    "ethers": "5.7.2"
+    "@metamask/key-tree": "^7.0.0",
+    "@metamask/snaps-ui": "^0.31.0",
+    "ethers": "^5.7.2"
   }
 }

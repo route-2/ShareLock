@@ -23,10 +23,7 @@ template Gaus() {
     m2 = (y3-y2)/(x3-x2);
 
     if(m1==m2){
-        outx1 <-- x1;
-        outx2 <-- x2;
-        outy1 <-- y1;
-        outy2 <-- y2;
+       res <-- 1;
     }
 
 

@@ -1,3 +1,5 @@
+// work in progress
+// fix bigint
 pragma circom 2.1.4;
 template divmod(a1,b1,n1) {
   signal input a;
