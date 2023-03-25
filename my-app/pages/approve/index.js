@@ -4,6 +4,30 @@ import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 
 export default function Approve() {
+    const defaultSnapOrigin = `local:http://localhost:8080`;
+
+    const connectSnap = async (
+        snapId = defaultSnapOrigin,
+        params = {}
+      ) => {
+        await window.ethereum?.request({
+          method: "wallet_requestSnaps",
+          params: {
+            [snapId]: params,
+          },
+        });
+      };
+      const callSnap = async()=>{
+        await window.ethereum?.request({
+          method:"wallet_invokeSnap",
+          params:{
+            snapId : defaultSnapOrigin,
+            request:{
+              method:"approve",
+            },
+          },
+        });
+      }
     return (
         <>
         <Head>
@@ -18,47 +42,26 @@ export default function Approve() {
         
 
 
-
-<div class="grid grid-cols-3 gap-4 justify-items-stretch h-48">
-  <div class="text-gray-700  flex justify-center items-center px-4 py-2"> 
-  
-  </div>
-  <div class="justify-self-center shadow-2xl my-32 text-gray-800 flex justify-center items-center px-4 py-2">  
-  
-  <form class="w-full max-w-sm content-center">
-  <div class="md:flex md:items-center mb-6 my-8">
-    <div class="md:w-1/3">
-      <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
-        Your Share
-      </label>
-    </div>
-    <div class="md:w-2/3">
-      <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value="Address"/>
-    </div>
-  </div>
-  <div class="md:flex md:items-center mb-6">
-    <div class="md:w-1/3"></div>
-    <label class="md:w-2/3 block text-gray-500 font-bold">
-      
-      <span class="text-sm">
-       Counter
-      </span>
-    </label>
-  </div>
-  
-  
-  <div class="md:flex md:items-center my-8">
-    <div class="md:w-1/3"></div>
-    <div class="md:w-2/3">
-      <button class="shadow bg-black hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">
-        I approve
+      <div class="grid  place-items-stretch  h-48"> 
+      <div class="w-full max-w-xs  place-self-center">
+  <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+   
+    
+    <div class="flex items-center justify-between">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={()=>callSnap()} type="button">
+       I Approve
       </button>
+      <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
+        Forgot Password?
+      </a>
     </div>
-  </div>
-</form>
-  </div>
-  
+  </form>
+ 
 </div>
+</div>
+
+
+
 
 
     </>

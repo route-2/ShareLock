@@ -140,6 +140,19 @@ var ans = split(secret,4,3,prime);
 
       });
     }
+    case 'approve': {
+      return snap.request({
+        method: "snap_dialog",
+        params: {
+          type: 'Prompt',
+          content: panel([
+            heading('What is your share?'),
+            text('Please enter the share given to you'),
+          ]),
+          placeholder: '0x123...',
+        },
+      });
+    }
 
       
 
