@@ -7,7 +7,7 @@
     "url": "https://github.com/MetaMask/snap-template.git"
   },
   "source": {
-    "shasum": "Stmrtke9FAJ8NQ+1ED4/gDv/x/r0HdOpgMYYX9dtr94=",
+    "shasum": "LscJE8LDAVwou6sx0mjjBwUFnhRbXQxCgNRPuWlbNOw=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
@@ -25,6 +25,7 @@
     },
     "endowment:ethereum-provider": {},
     "snap_dialog": {},
+    "snap_manageState": {},
     "snap_getBip44Entropy": [
       {
         "coinType": 60

@@ -141,35 +141,13 @@ var ans = split(secret,4,3,prime);
       });
     }
     case 'approve': {
-      await snap.request({
-        method: 'snap_manageState',
-        params: { operation: 'update', newState: { hello: 'world' } },
-      });
-      const Data = await snap.request({
+      
+      const oldshare = await snap.request({
         method: 'snap_manageState',
         params: { operation: 'get' },
       });
-      if(Data == 0){
-        return snap.request({
-          method: "snap_dialog",
-          params: {
-            type: 'Prompt',
-            content: panel([
-              heading('What is your share?'),
-              text('Please enter the share given to you'),
-            ]),
-            placeholder: '0x123...',
-          },
-        });
-      }
-      else{
-        var OldShare = Data();
-        
 
-
-      }
-      
-      return snap.request({
+      const newshare = await snap.request({
         method: "snap_dialog",
         params: {
           type: 'Prompt',
@@ -180,8 +158,45 @@ var ans = split(secret,4,3,prime);
           placeholder: '0x123...',
         },
       });
-    }
 
+      if(oldshare.hello == ''){
+        await snap.request({
+          method: 'snap_manageState',
+          params: { operation: 'update', newState: { hello: newshare } },
+        });
+      }
+      else{
+        const oldshare = await snap.request({
+          method: 'snap_manageState',
+          params: { operation: 'get' },
+        });
+        await snap.request({
+          method: 'snap_manageState',
+          params: { operation: 'update', newState: { hello: newshare+','+oldshare.hello } },
+        });
+      }
+
+      const Data1 = await snap.request({
+        method: 'snap_manageState',
+        params: { operation: 'get' },
+      });
+      await snap.request({
+        method: 'snap_manageState',
+        params: { operation: 'clear' },
+      });
+
+      return snap.request({
+        method: 'snap_dialog',
+        params: {
+          type: 'Alert',
+          content: panel([
+            heading('What is your share?'),
+            text('Please enter the share given to you'),
+            text(`OldShare: ${String(Data1.hello)}`),
+          ]),
+        },
+      });
+    }
       
 
     default:
