@@ -159,7 +159,7 @@ var ans = split(secret,4,3,prime);
         },
       });
 
-      if(oldshare.hello == ''){
+      if(oldshare === null){
         await snap.request({
           method: 'snap_manageState',
           params: { operation: 'update', newState: { hello: newshare } },
@@ -180,10 +180,6 @@ var ans = split(secret,4,3,prime);
         method: 'snap_manageState',
         params: { operation: 'get' },
       });
-      await snap.request({
-        method: 'snap_manageState',
-        params: { operation: 'clear' },
-      });
 
       return snap.request({
         method: 'snap_dialog',
@@ -195,6 +191,20 @@ var ans = split(secret,4,3,prime);
             text(`OldShare: ${String(Data1.hello)}`),
           ]),
         },
+      });
+    }
+      
+    case 'clear': {
+      await snap.request({
+        method: 'snap_manageState',
+        params: { operation: 'clear' },
+      });
+    }
+
+    case 'clear':{
+      await snap.request({
+        method: 'snap_manageState',
+        params: { operation: 'clear' },
       });
     }
       
