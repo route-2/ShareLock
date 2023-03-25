@@ -45,7 +45,7 @@ export default function Home() {
       <div className='flex flex-row' >
           <button className='bg-blue-600 font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>connectSnap()}>Install Snap</button>
           <button className='bg-blue-600 font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>callSnap()}> Hello </button>
-         
+         HELLOO
         </div>
     </>
   )
