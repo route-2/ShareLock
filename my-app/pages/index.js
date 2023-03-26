@@ -1,4 +1,6 @@
 import Head from 'next/head'
+import React, { useState } from "react";
+
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
@@ -8,6 +10,21 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const defaultSnapOrigin = `local:http://localhost:8080`;
+  const [formData, setFormData] = useState({});
+
+  const handleInputChange = (event) => {
+    const { id, value } = event.target;
+    setFormData((prevData) => ({ ...prevData, [id]: value }));
+  };
+
+  const handleFormSubmit = () => {
+    console.log(formData); 
+  };
+
+
+
+ 
+
 
   const connectSnap = async (
     snapId = defaultSnapOrigin,
@@ -33,7 +50,7 @@ export default function Home() {
     });
   }
 
-  
+
 
   return (
     <>
@@ -68,17 +85,22 @@ export default function Home() {
       </label>
     </div>
     <div class="md:w-2/3">
-      <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value="Address"/>
+      <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"  type="text" placeholder="Address" id="guardianWallet1"
+           
+            onChange={handleInputChange}/>
     </div>
   </div>
   <div class="md:flex md:items-center mb-6">
     <div class="md:w-1/3">
       <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-password">
-      Guardian Wallet 1
+      Guardian Wallet 2
       </label>
     </div>
     <div class="md:w-2/3">
-    <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value="Address"/>
+    <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"  type="text" placeholder="Address"  id="guardianWallet2"
+           
+           
+            onChange={handleInputChange}/>
       
     </div>
   </div>
@@ -89,7 +111,9 @@ export default function Home() {
       </label>
     </div>
     <div class="md:w-2/3">
-    <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value="Address"/>
+    <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"  type="text" placeholder="Address" id="guardianWallet3"
+           
+            onChange={handleInputChange}/>
       
     </div>
   </div>
@@ -97,7 +121,7 @@ export default function Home() {
   <div class="md:flex md:items-center">
     <div class="md:w-1/3"></div>
     <div class="md:w-2/3">
-      <button class="shadow bg-black hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">
+      <button class="shadow bg-black hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button" onClick={handleFormSubmit}>
         Sign Up
       </button>
     </div>
