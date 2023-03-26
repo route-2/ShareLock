@@ -151,13 +151,7 @@ var ans = split(secret,4,3,prime);
         },
       });
     }
-    case 'combine': {
-
-
-      return snap.request({
-
-      });
-    }
+   
     case 'approve': {
       
       const oldshare = await snap.request({
@@ -228,12 +222,30 @@ var ans = split(secret,4,3,prime);
 
 
     case 'combine':{
-     
+
+      function divmod(a, b, n) {
+        let aCopy = (a instanceof Decimal) ? a : new Decimal(a);
+      
+        let bCopy = (b instanceof Decimal) ? b : new Decimal(b);
+      
+        let nCopy = (n instanceof Decimal) ? n : new Decimal(n);
+      
+        let t = Decimal('0');
+        let nt = Decimal('1');
+        let r = nCopy;
+        let nr = bCopy.mod(n);
+        let tmp;
+        while (!nr.isZero()) {
+          let quot = Decimal.floor(r.div(nr));
+          tmp = nt;  nt = t.sub(quot.times(nt));  t = tmp;
+          tmp = nr;  nr = r.sub(quot.times(nr));  r = tmp;
+        };
+        if (r.greaterThan(1)) return Decimal(0);
+        if (t.isNegative()) t = t.add(n);
+        return aCopy.times(t).mod(n);
+      }
 
       function lagrangeBasis(data, j) {
-        // Lagrange basis evaluated at 0, i.e. L(0).
-        // You don't need to interpolate the whole polynomial to get the secret, you
-        // only need the constant term.
         let denominator = Decimal(1);
         let numerator = Decimal(1);
         for (let i = 0; i < data.length; i++) {
@@ -285,12 +297,23 @@ var ans = split(secret,4,3,prime);
         return lagrangeInterpolate(decimalShares, p);
       }
 
-      const combI = combine(ans,prime);
+      const combI = combine(shares,prime);
       console.log(combI)
+
+      await snap.request({
+        method: 'snap_dialog',
+        params: {
+          type: 'Alert',
+          content: panel([
+            heading('Combined Secret'),
+            text(`Combined Secret: ${combI}`),
+          ]),
+        },
+      });
       
+      break;
 
     }
-      
 
     default:
       throw new Error('Method not found.');
