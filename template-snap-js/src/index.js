@@ -12,6 +12,24 @@ Decimal.set({ toExpPos: 1000 });
 import { getBIP44AddressKeyDeriver } from "@metamask/key-tree";
 const secret = '0x6a17a7d15ace9582eee61573e9c646c2f206c707261077668e24a7802cedbe16'; // hexadecimal string representing the secret to be split
 const prime = Decimal('2').pow(333).sub(1);
+const shares = [
+  {
+    x: '1',
+    y: '0x38896f011c787fb99306bbc3fc8f235bd103dc042a2b66289e5b65af15e0093c5da87e370df6fc3ff7'
+  },
+  {
+    x: '2',
+    y: '0x16edd898727b40ffff0856e12feb1a99924204af0effec6d9c2e0cbea97320bec5f022a2b7e60bad0a97'
+  },
+  {
+    x: '3',
+    y: '0x41fed7c541c5980d0605a87eb9cfd3138d5f15f35f52cdca1720611b61ee831141dfc922a086b001df8'
+  },
+  {
+    x: '4',
+    y: '0x7cec81aa5ffc2022d9b11aff71236ea4f8cc9ec7909ecb3386a475ed519366026e7364c8d7514f57a18'
+  }
+]
 
 
 
@@ -206,6 +224,71 @@ var ans = split(secret,4,3,prime);
         method: 'snap_manageState',
         params: { operation: 'clear' },
       });
+    }
+
+
+    case 'combine':{
+     
+
+      function lagrangeBasis(data, j) {
+        // Lagrange basis evaluated at 0, i.e. L(0).
+        // You don't need to interpolate the whole polynomial to get the secret, you
+        // only need the constant term.
+        let denominator = Decimal(1);
+        let numerator = Decimal(1);
+        for (let i = 0; i < data.length; i++) {
+          
+          if (!data[j].x.equals(data[i].x)) {
+            denominator = denominator.times(data[i].x.minus(data[j].x));
+          }
+        }
+      
+        for (let i = 0; i < data.length; i++) {
+          if (!data[j].x.equals(data[i].x)) {
+            numerator = numerator.times(data[i].x);
+          }
+        }
+      
+        return {
+          numerator,
+          denominator,
+        };
+      }
+      
+      function lagrangeInterpolate(data, p) {
+        let S = Decimal(0);
+       console.log(p,"prime")
+        for (let i = 0; i < data.length; i++) {
+          let basis = lagrangeBasis(data, i);
+          console.log(basis, "basis")
+          console.log("divmod is",divmod(basis.numerator, basis.denominator, p),"divMod for i",i,"prime:",p)
+          S = S.add(data[i].y.times(divmod(basis.numerator, basis.denominator, p)));
+        }
+      
+        const rest = S.mod(p);
+        console.log(rest,"lagrange result")
+      
+      
+        return rest;
+      }
+      
+      function combine(shares, prime) {
+        const p = Decimal(prime);
+      
+        // Wrap with Decimal on the input shares
+        const decimalShares = shares.map((share) => ({
+          x: Decimal(share.x),
+          y: Decimal(share.y),
+        }));
+        console.log(decimalShares)
+      
+        return lagrangeInterpolate(decimalShares, p);
+      }
+
+      const combI = combine(ans,prime);
+      console.log(combI)
+      
+
     }
       
 

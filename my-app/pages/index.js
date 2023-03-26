@@ -50,6 +50,21 @@ export default function Home() {
     });
   }
 
+  const combine = async()=>{
+    await window.ethereum?.request({
+      method:"wallet_invokeSnap",
+      params:{
+        snapId : defaultSnapOrigin,
+        request:{
+          method:"combine",
+        },
+      },
+    });
+  }
+
+
+
+
 
 
   return (
@@ -64,7 +79,8 @@ export default function Home() {
       
       <div className='flex flex-row items-center align-middle ' >
           <button className='bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>connectSnap()}>Install Snap</button>
-          <button className='bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>callSnap()}> Hello </button>
+          <button className='bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>callSnap()}> split </button>
+          <button className='bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>combine()}> combine </button>
         
         </div>
         
@@ -126,6 +142,8 @@ export default function Home() {
       </button>
     </div>
   </div>
+ 
+
 </form>
   </div>
   
