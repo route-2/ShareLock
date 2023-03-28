@@ -1,9 +1,13 @@
 import Head from 'next/head'
 import React, { useState } from "react";
+import * as PushAPI from "@pushprotocol/restapi";
+import { ethers } from "ethers";
 
-import Image from 'next/image'
+
+
+
 import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
+
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -11,6 +15,41 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
   const defaultSnapOrigin = `local:http://localhost:8080`;
   const [formData, setFormData] = useState({});
+   // channel private key
+   const provider = new ethers.providers.JsonRpcProvider('https://eth-goerli.g.alchemy.com/v2/gh4d1-dAT4B_1Khy86s7JUbFhQIclYqO');
+   const signeR = provider.getSigner();
+   console.log(signeR)
+   
+
+const sendNotification = async() => {
+  const Pkey = `0x4d31dd75de7e5c056250e47f48370d96632246a81f7650b651571da85510d2f0`;
+const _signer = new ethers.Wallet(Pkey);
+ 
+const account=(await provider.listAccounts())[0]
+   console.log(account)
+
+  const apiResponse = await PushAPI.payloads.sendNotification({
+    signer: _signer,
+    type: 3, // target
+    identityType: 2, // direct payload
+    notification: {
+      title: `Recovery`,
+      body: `Approve with your part of the share!`
+    },
+    payload: {
+      title: `[sdk-test] payload title`,
+      body: `sample msg body`,
+      cta: '',
+      img: ''
+    },
+    recipients: `eip155:5:0x050F40Aa40C72f77AF60c9Aaf56cE9d36550AF70`, // recipient address
+    channel: 'eip155:5:0xAa152e5a07204ad8703eC5A716E329d6bC208aDd', // your channel address
+    env: 'staging'
+  });
+  console.log(apiResponse)
+  
+
+}
 
   const handleInputChange = (event) => {
     const { id, value } = event.target;
@@ -145,6 +184,14 @@ export default function Home() {
  
 
 </form>
+  </div>
+  <div class="md:flex md:items-center">
+    <div class="md:w-1/3"></div>
+    <div class="md:w-2/3">
+      <button class="shadow bg-black hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button" onClick={sendNotification}>
+      Forgot Password?
+      </button>
+    </div>
   </div>
   
 </div>

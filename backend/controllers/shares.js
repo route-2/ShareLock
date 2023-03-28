@@ -1,4 +1,9 @@
 
+// postShares() we need mapping for acc => shares that they hold from split()
+// create model for mapping
+// getShares() fetch the shares in db
+// deleteShares() delete db instance 
+
 const getShares = (req, res) => {
     res.render("shares", {
     } );
