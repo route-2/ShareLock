@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
         required: true,
         trim: true
       },
-      location: {
+      shares: {
         type: String,
         required: true,
         trim: true
