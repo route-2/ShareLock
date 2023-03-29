@@ -126,7 +126,7 @@ const account=(await provider.listAccounts())[0]
 
 
 
-<div class="grid grid-cols-3 gap-4 justify-items-stretch h-48">
+<div class="grid grid-cols-3 gap-4 justify-items-stretch h-72">
   <div class="text-gray-700  flex justify-center items-center px-4 py-2"> 
   
   </div>
@@ -185,16 +185,17 @@ const account=(await provider.listAccounts())[0]
 
 </form>
   </div>
-  <div class="md:flex md:items-center">
+ 
+  
+</div>
+ <div class="md:flex mt-6 ml-44 md:items-center">
     <div class="md:w-1/3"></div>
     <div class="md:w-2/3">
-      <button class="shadow bg-black hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button" onClick={sendNotification}>
+      <button class="shadow  hover:bg-gray-400 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-4 rounded" type="button" onClick={sendNotification}>
       Forgot Password?
       </button>
     </div>
   </div>
-  
-</div>
 
 
     </>
