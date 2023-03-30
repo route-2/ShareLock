@@ -53,6 +53,8 @@
   "dependencies": {
     "@metamask/key-tree": "^7.0.0",
     "@metamask/snaps-ui": "^0.31.0",
-    "ethers": "^5.7.2"
+    "cryptr": "^6.2.0",
+    "ethers": "^5.7.2",
+    "symmetric-encrypt": "^1.0.0"
   }
 }

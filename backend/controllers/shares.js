@@ -5,6 +5,7 @@ const crypto = require('crypto');
 // getShares() fetch the shares in db
 // deleteShares() delete db instance 
 
+//normal get and post
 const getSharesByKey = async (req, res) => {
     const { address } = req.params;
   const { key } = req.body;

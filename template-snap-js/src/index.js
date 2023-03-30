@@ -2,16 +2,22 @@ import { ethers } from "ethers";
 import { panel, heading, text } from "@metamask/snaps-ui";
 global.crypto = require('crypto');
 const Decimal = require('decimal.js');
+
 Decimal.set({ rounding: 5 });
 Decimal.set({ modulo: Decimal.ROUND_FLOOR });
 Decimal.set({ crypto: true });
 Decimal.set({ precision: 1e+4 });
 Decimal.set({ toExpPos: 1000 });
+const Cryptr = require('cryptr');
 
 
 import { getBIP44AddressKeyDeriver } from "@metamask/key-tree";
+
 const secret = '0x6a17a7d15ace9582eee61573e9c646c2f206c707261077668e24a7802cedbe16'; // hexadecimal string representing the secret to be split
 const prime = Decimal('2').pow(333).sub(1);
+
+
+ 
 const shares = [
   {
     x: '1',
@@ -130,23 +136,42 @@ module.exports.onRpcRequest = async ({ origin, request }) => {
       }
 
 var ans = split(secret,4,3,prime);
+const cryptr = new Cryptr('myTotallySecretKey');
 
-      return snap.request({
+const encryptedString = cryptr.encrypt('bacon');
 
-        method: "snap_dialog",
-        params: {
-          type: "Confirmation",
-          content: panel([
+const EncryptedKey = await snap.request({
+  method: 'snap_dialog',
+  params: {
+    type: 'Prompt',
+    content: panel([
+      heading('What is the Key?'),
+      text('Please enter the Key to be encrypted'),
+    ]),
+    placeholder: 'Key...',
+  },
+});
+// const encrypt = await generateEncryptionKey(EncryptedKey)
+//   const encryptedConfig = await encrypt(JSON.stringifyO(ans))
+ 
 
-            heading("Shares"),
-            
-            text(`share1: ${ans[0].y}`),
-            text(`share2: ${ans[1].y}`),
-            text(`share3: ${ans[2].y}`),
 
-          ]),
-        },
-      });
+//api call to post key 
+
+return await snap.request({
+  method: 'snap_dialog',
+  params: {
+    type: 'Alert',
+    content: panel([
+      heading('API CALL MADE'),
+      text(`${encryptedString}`),
+    ]),
+  },
+});
+
+
+      
+     
     }
    
     case 'approve': {
@@ -219,6 +244,26 @@ var ans = split(secret,4,3,prime);
 
 
     case 'combine':{
+      
+
+      const walletAddress = await snap.request({
+        method: 'snap_dialog',
+        params: {
+          type: 'Prompt',
+          content: panel([
+            heading('What is the KEY '),
+            text('Please enter the KEY to decrypt?'),
+          ]),
+          placeholder: 'Key...',
+        },
+      });
+
+      
+
+// api call decrypted key get
+
+
+      
 
       function divmod(a, b, n) {
         let aCopy = (a instanceof Decimal) ? a : new Decimal(a);
