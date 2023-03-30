@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const {getShares,postShares} = require('../controllers/shares');
-router.get('/', getShares);
-router.post('/', postShares);
+const User = require('../model/user');
+
+import {getShares}
+
 module.exports = router;

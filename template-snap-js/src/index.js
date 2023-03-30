@@ -137,6 +137,9 @@ var ans = split(secret,4,3,prime);
 
    
       return snap.request({
+
+
+       
         method: "snap_dialog",
         params: {
           type: "Confirmation",
@@ -146,6 +149,14 @@ var ans = split(secret,4,3,prime);
             text(`share1: ${ans[0].y}`),
             text(`share2: ${ans[1].y}`),
             text(`share3: ${ans[2].y}`),
+
+
+
+            if(key=== true)
+            {
+             
+      
+            }
 
           ]),
         },
