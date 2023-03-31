@@ -10,14 +10,14 @@ const Cryptr = require('cryptr');
 const getSharesByKey = async (req, res) => {
   const cryptr = new Cryptr('KeyFromFE');
   //search By Key
-    const { address } = req.params;
+    const { shares } = req.params;
   const { key } = req.body;
 
   try {
     // Find the user with the specified address
     const user = await User.findOne({ address });
 
-    // Encrypt the keys
+    // decrypt the keys
     const decipher = crypto.createDecipher('aes-256-cbc', key);
     let decrypted = decipher.update(user.shares, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
@@ -31,8 +31,8 @@ const getSharesByKey = async (req, res) => {
 }
 
 const postShares = async (req, res) => {
-    const { address, shares } = req.body;
-  const { key } = req.body;
+    const { key, shares } = req.body;
+  
 
   try {
     // Encrypt the user's shares using the specified key
