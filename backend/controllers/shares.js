@@ -1,5 +1,6 @@
 import User from "../model/user";
 const crypto = require('crypto');
+const Cryptr = require('cryptr');
 // postShares() we need mapping for acc => shares that they hold from split()
 // create model for mapping
 // getShares() fetch the shares in db
@@ -7,6 +8,8 @@ const crypto = require('crypto');
 
 //normal get and post
 const getSharesByKey = async (req, res) => {
+  const cryptr = new Cryptr('KeyFromFE');
+  //search By Key
     const { address } = req.params;
   const { key } = req.body;
 
@@ -14,7 +17,7 @@ const getSharesByKey = async (req, res) => {
     // Find the user with the specified address
     const user = await User.findOne({ address });
 
-    // Decrypt the user's shares using the specified key
+    // Encrypt the keys
     const decipher = crypto.createDecipher('aes-256-cbc', key);
     let decrypted = decipher.update(user.shares, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
@@ -51,6 +54,6 @@ const postShares = async (req, res) => {
 }
 
 module.exports = {
-    getShares,
+    getSharesByKey,
     postShares
 }
