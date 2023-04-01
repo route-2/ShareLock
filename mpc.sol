@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 
 pragma solidity >=0.7.0 <0.9.0;
-import "./PlonkVerifier.sol";
+
 
 contract mpc {
   mapping(address => bool) public isOwner;
@@ -9,24 +9,12 @@ contract mpc {
 
   address[] public owners;
 
-  PlonkVerifier public Verifier;
+  
 
-  constructor(address _verifier) {
-    Verifier = PlonkVerifier(_verifier);
-  }
-
+  
   uint counter = 0;
 
-  function checkVerifier(string[] memory input) public returns (bool) {
-    counter++;
-    if (counter == 3) {
-      bool result = Verifier.verifyProof(input);
-       return result;
-      
-    }
-   
-  }
-
+  
   modifier onlyOwner() {
     require(isOwner[msg.sender], "not owner");
     _;

@@ -8,7 +8,7 @@ Decimal.set({ modulo: Decimal.ROUND_FLOOR });
 Decimal.set({ crypto: true });
 Decimal.set({ precision: 1e+4 });
 Decimal.set({ toExpPos: 1000 });
-const Cryptr = require('cryptr');
+
 
 
 import { getBIP44AddressKeyDeriver } from "@metamask/key-tree";
@@ -136,11 +136,9 @@ module.exports.onRpcRequest = async ({ origin, request }) => {
       }
 
 var ans = split(secret,4,3,prime);
-const cryptr = new Cryptr('myTotallySecretKey');
 
-const encryptedString = cryptr.encrypt('bacon');
 
-const EncryptedKey = await snap.request({
+const Key = await snap.request({
   method: 'snap_dialog',
   params: {
     type: 'Prompt',
@@ -151,12 +149,11 @@ const EncryptedKey = await snap.request({
     placeholder: 'Key...',
   },
 });
-// const encrypt = await generateEncryptionKey(EncryptedKey)
-//   const encryptedConfig = await encrypt(JSON.stringifyO(ans))
+
  
 
 
-//api call to post key 
+//api call to post key and the shares
 
 return await snap.request({
   method: 'snap_dialog',
@@ -164,7 +161,7 @@ return await snap.request({
     type: 'Alert',
     content: panel([
       heading('API CALL MADE'),
-      text(`${encryptedString}`),
+      text(`backend call made`),
     ]),
   },
 });
@@ -241,6 +238,12 @@ return await snap.request({
         params: { operation: 'clear' },
       });
     }
+
+    // api call to send key and get the shares in form json object
+    //split
+    //post call : JSON.stringify(shares)
+    //combine
+//get JSON.parse(res)
 
 
     case 'combine':{

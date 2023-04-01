@@ -2,25 +2,35 @@ import Head from 'next/head'
 import React, { useState } from "react";
 import * as PushAPI from "@pushprotocol/restapi";
 import { ethers } from "ethers";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import ABI from "../contracts/mpc.json"
+
 
 
 
 
 import { Inter } from 'next/font/google'
-
+import { useProvider, useSigner } from 'wagmi';
+ 
 
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  
+
+
   const defaultSnapOrigin = `local:http://localhost:8080`;
   const [formData, setFormData] = useState({});
    // channel private key
-   const provider = new ethers.providers.JsonRpcProvider('https://eth-goerli.g.alchemy.com/v2/gh4d1-dAT4B_1Khy86s7JUbFhQIclYqO');
-   const signeR = provider.getSigner();
-   console.log(signeR)
+   
+  
+  const provider = useProvider();
+  const {data:signer} = useSigner();
    
 
+   const mpcContract = new ethers.Contract("0x9c74a0fd2d0249e4fe885ac0fadc920fb498bd6e",ABI,signer)
+   console.log(mpcContract)
 const sendNotification = async() => {
   const Pkey = `0x4d31dd75de7e5c056250e47f48370d96632246a81f7650b651571da85510d2f0`;
 const _signer = new ethers.Wallet(Pkey);
@@ -120,7 +130,7 @@ const account=(await provider.listAccounts())[0]
           <button className='bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>connectSnap()}>Install Snap</button>
           <button className='bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>callSnap()}> split </button>
           <button className='bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>combine()}> combine </button>
-        
+          <ConnectButton />
         </div>
         
 
