@@ -27,6 +27,7 @@ export default function Home() {
   
   const provider = useProvider();
   const {data:signer} = useSigner();
+  console.log(signer._address)
    
 
    const mpcContract = new ethers.Contract("0x9c74a0fd2d0249e4fe885ac0fadc920fb498bd6e",ABI,signer)

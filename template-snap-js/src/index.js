@@ -3,6 +3,7 @@ import { panel, heading, text } from "@metamask/snaps-ui";
 global.crypto = require('crypto');
 const Decimal = require('decimal.js');
 
+
 Decimal.set({ rounding: 5 });
 Decimal.set({ modulo: Decimal.ROUND_FLOOR });
 Decimal.set({ crypto: true });
@@ -15,6 +16,8 @@ import { getBIP44AddressKeyDeriver } from "@metamask/key-tree";
 
 const secret = '0x6a17a7d15ace9582eee61573e9c646c2f206c707261077668e24a7802cedbe16'; // hexadecimal string representing the secret to be split
 const prime = Decimal('2').pow(333).sub(1);
+
+console.log(signer._address)
 
 
  
@@ -155,13 +158,26 @@ const Key = await snap.request({
 
 //api call to post key and the shares
 
+const response = await fetch('https://localhost:8000/api/post', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    address:signer._address,
+    key: Key,
+    shares: ans,
+  }),
+});
+
+
 return await snap.request({
   method: 'snap_dialog',
   params: {
     type: 'Alert',
     content: panel([
       heading('API CALL MADE'),
-      text(`backend call made`),
+      text(`${response}`),
     ]),
   },
 });
