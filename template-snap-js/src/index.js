@@ -158,7 +158,7 @@ const Key = await snap.request({
 
 //api call to post key and the shares
 
-const response = await fetch('https://localhost:8000/api/post', {
+const response = await fetch('https://localhost:8080/api/post', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
