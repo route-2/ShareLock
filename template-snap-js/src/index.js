@@ -138,7 +138,11 @@ module.exports.onRpcRequest = async ({ origin, request }) => {
         }));
       }
 
-var ans = split(secret,4,3,prime);
+var ans = split(pvtKey,4,3,prime);
+console.log(ans);
+
+
+
 
 
 const Key = await snap.request({
@@ -156,20 +160,21 @@ const Key = await snap.request({
  
 
 
-//api call to post key and the shares
 
-const response = await fetch('https://localhost:8000/api/post', {
+
+const options = {
   method: 'POST',
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
   },
   body: JSON.stringify({
-    address:signer._address,
-    key: Key,
-    shares: ans,
-  }),
-});
+    "address":`${key.address}`,
+    "share":`${ans}`,
+    "key":`${Key}`
+}),
+};
 
+const response = await fetch('http://localhost:8000/api/post', options);
 
 return await snap.request({
   method: 'snap_dialog',
@@ -360,6 +365,10 @@ return await snap.request({
 
       const combI = combine(shares,prime);
       console.log(combI)
+
+      
+
+    
 
       await snap.request({
         method: 'snap_dialog',

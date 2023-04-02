@@ -1,7 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
-const mongoString = process.env.MONGODB_URI;
+const cors = require('cors');
+
+const mongoString = process.env.mongodb;
+
+
 const routes = require('./routes/routes');
 
 mongoose.connect(mongoString);
@@ -16,6 +20,7 @@ database.once('connected', () => {
 })
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use('/api', routes)
 

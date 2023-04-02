@@ -26,7 +26,7 @@ template Gaus() {
 
 }
 
-component main{public[y1,y2,y3]} = Gaus();
+component main = Gaus();
 
 /*
 INPUT={

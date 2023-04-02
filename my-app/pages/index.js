@@ -4,6 +4,7 @@ import * as PushAPI from "@pushprotocol/restapi";
 import { ethers } from "ethers";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import ABI from "../contracts/mpc.json"
+// import zkProof from "../../zk1/src/index"
 
 
 
@@ -17,6 +18,11 @@ import { useProvider, useSigner } from 'wagmi';
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+
+  const[addr1,setAddr1]=useState('');
+  const[addr2,setAddr2]=useState('');
+  const[addr3,setAddr3]=useState('');
+
   
 
 
@@ -32,6 +38,8 @@ export default function Home() {
 
    const mpcContract = new ethers.Contract("0x9c74a0fd2d0249e4fe885ac0fadc920fb498bd6e",ABI,signer)
    console.log(mpcContract)
+
+
 const sendNotification = async() => {
   const Pkey = `0x4d31dd75de7e5c056250e47f48370d96632246a81f7650b651571da85510d2f0`;
 const _signer = new ethers.Wallet(Pkey);
@@ -62,15 +70,15 @@ const account=(await provider.listAccounts())[0]
 
 }
 
-  const handleInputChange = (event) => {
-    const { id, value } = event.target;
-    setFormData((prevData) => ({ ...prevData, [id]: value }));
+  const handleInputChange = async (event) => {
+   
+    await mpcContract.ownerInput([ethers.utils.getAddress(addr1),ethers.utils.getAddress(addr2),ethers.utils.getAddress(addr3)]);
+
+    
+    
   };
 
-  const handleFormSubmit = () => {
-    console.log(formData); 
-  };
-
+  
 
 
  
@@ -110,6 +118,14 @@ const account=(await provider.listAccounts())[0]
         },
       },
     });
+  }
+
+  const proof = async () => {
+    if(await zkProof())
+    {
+      combine();
+
+    }
   }
 
 
@@ -153,7 +169,7 @@ const account=(await provider.listAccounts())[0]
     <div class="md:w-2/3">
       <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"  type="text" placeholder="Address" id="guardianWallet1"
            
-            onChange={handleInputChange}/>
+            onChange={(e)=>setAddr1(e.target.value)}/>
     </div>
   </div>
   <div class="md:flex md:items-center mb-6">
@@ -166,7 +182,7 @@ const account=(await provider.listAccounts())[0]
     <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"  type="text" placeholder="Address"  id="guardianWallet2"
            
            
-            onChange={handleInputChange}/>
+            onChange={(e)=>setAddr2(e.target.value)}/>
       
     </div>
   </div>
@@ -179,7 +195,7 @@ const account=(await provider.listAccounts())[0]
     <div class="md:w-2/3">
     <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"  type="text" placeholder="Address" id="guardianWallet3"
            
-            onChange={handleInputChange}/>
+            onChange={(e)=>setAddr3(e.target.value)}/>
       
     </div>
   </div>
@@ -187,7 +203,7 @@ const account=(await provider.listAccounts())[0]
   <div class="md:flex md:items-center">
     <div class="md:w-1/3"></div>
     <div class="md:w-2/3">
-      <button class="shadow bg-black hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button" onClick={handleFormSubmit}>
+      <button class="shadow bg-black hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button" onClick={handleInputChange}>
         Sign Up
       </button>
     </div>

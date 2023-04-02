@@ -1,6 +1,7 @@
 const {CircomJS} = require("@zefi/circomjs")
+const fs = require("fs")
 
-const main = async() => {
+const zkProof = async() => {
     const circomjs = new CircomJS()
     const circuit =  circomjs.getCircuit("mul")
 
@@ -21,4 +22,4 @@ const main = async() => {
     console.log("proof verification result ----->",await circuit.verifyProof(proof))
 }
 
-main()
+export default zkProof()

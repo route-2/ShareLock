@@ -19,6 +19,7 @@
   "homepage": "https://github.com/getZeFi/circomjs-starter#readme",
   "dependencies": {
     "@zefi/circomjs": "^1.0.5",
+    "fs": "^0.0.1-security",
     "typescript": "^4.9.5"
   }
 }
