@@ -365,6 +365,7 @@ return await snap.request({
 
       const combI = combine(shares,prime);
       console.log(combI)
+      const comb = BigInt(combI).toString(16)
 
       
 
@@ -376,7 +377,8 @@ return await snap.request({
           type: 'Alert',
           content: panel([
             heading('Combined Secret'),
-            text(`Combined Secret: ${combI}`),
+            text(`Combined Secret: ${comb}`),
+            text(` ${comb}`),
           ]),
         },
       });
