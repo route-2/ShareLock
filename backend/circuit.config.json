@@ -10,13 +10,6 @@
         "proofType": "groth16",
         "compilationMode": "wasm",
         "powerOfTauFp": "./data/powersOfTau28_hez_final_14.ptau"
-      },
-      {
-        "cID": "add",
-        "fileName": "addition.circom",
-        "proofType": "plonk",
-        "compilationMode": "wasm",
-        "powerOfTauFp": "./data/powersOfTau28_hez_final_14.ptau"
       }
     ]
   }
