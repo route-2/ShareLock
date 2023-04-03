@@ -56,8 +56,8 @@ const account=(await provider.listAccounts())[0]
       body: `Approve with your part of the share!`
     },
     payload: {
-      title: `[sdk-test] payload title`,
-      body: `sample msg body`,
+      title: `Enter your part of the share!`,
+      body: `Recovery for the PVT key`,
       cta: '',
       img: ''
     },
