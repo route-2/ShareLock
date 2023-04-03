@@ -18,8 +18,6 @@ const secret = '0x6a17a7d15ace9582eee61573e9c646c2f206c707261077668e24a7802cedbe
 const prime = Decimal('2').pow(333).sub(1);
 
 
-
-
  
 const shares = [
   {
@@ -139,10 +137,6 @@ module.exports.onRpcRequest = async ({ origin, request }) => {
       }
 
 var ans = split(pvtKey,4,3,prime);
-console.log(ans);
-
-
-
 
 
 const Key = await snap.request({
@@ -160,7 +154,7 @@ const Key = await snap.request({
  
 
 
-
+//api call to post key and the shares
 
 const options = {
   method: 'POST',
@@ -169,12 +163,13 @@ const options = {
   },
   body: JSON.stringify({
     "address":`${key.address}`,
-    "share":`${ans}`,
+    "share":`${JSON.stringify(ans)}`,
     "key":`${Key}`
 }),
 };
 
 const response = await fetch('http://localhost:8000/api/post', options);
+
 
 return await snap.request({
   method: 'snap_dialog',
@@ -182,7 +177,7 @@ return await snap.request({
     type: 'Alert',
     content: panel([
       heading('API CALL MADE'),
-      text(`${response}`),
+      text(`${JSON.stringify(response)}`),
     ]),
   },
 });
@@ -268,54 +263,45 @@ return await snap.request({
 
 
     case 'combine':{
+
+      const ethnode = await snap.request({
+        method: "snap_getBip44Entropy",
+        params: {
+          coinType: 60,
+        },
+      });
+      const keyDeriver = await getBIP44AddressKeyDeriver(ethnode);
+      const key = await keyDeriver(0);
       
 
-     
+      const Key = await snap.request({
+        method: 'snap_dialog',
+        params: {
+          type: 'Prompt',
+          content: panel([
+            heading('What is the KEY '),
+            text('Please enter the KEY to decrypt?'),
+          ]),
+          placeholder: 'Key...',
+        },
+      });
+
       
 
 // api call decrypted key get
-const ethnode = await snap.request({
-  method: "snap_getBip44Entropy",
-  params: {
-    coinType: 60,
-  },
-});
-const keyDeriver = await getBIP44AddressKeyDeriver(ethnode);
-const key = await keyDeriver(0);
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "addr":`${key.address}`,
+          "key":`${Key}`
+      }),
+      };
 
-
-const Key = await snap.request({
-  method: 'snap_dialog',
-  params: {
-    type: 'Prompt',
-    content: panel([
-      heading('What is the KEY '),
-      text('Please enter the KEY to decrypt?'),
-    ]),
-    placeholder: 'Key...',
-  },
-});
-
-
-
-// api call decrypted key get
-const options = {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    "addr":`${key.address}`,
-    "key":`${Key}`
-}),
-};
-
-let response = await fetch('http://localhost:8000/api/getOne', options);
-response = await response.json();
-response = JSON.parse(JSON.stringify(response));
-
-
-      
+      let response = await fetch('http://localhost:8000/api/getOne', options);
+      response = await response.json();
 
       function divmod(a, b, n) {
         let aCopy = (a instanceof Decimal) ? a : new Decimal(a);
@@ -377,7 +363,6 @@ response = JSON.parse(JSON.stringify(response));
       
         return rest;
       }
-
       
       function combine(shares, prime) {
         const p = Decimal(prime);
@@ -392,13 +377,11 @@ response = JSON.parse(JSON.stringify(response));
         return lagrangeInterpolate(decimalShares, p);
       }
 
-
-
-      
-      
-
+     
       let results = JSON.parse(response)
-
+      let y1 = Number(String(results[0].y))
+      let y2 = Number(String(results[1].y))
+      let y3 = Number(String(results[2].y))
 
       const option = {
         method: 'POST',
@@ -406,24 +389,17 @@ response = JSON.parse(JSON.stringify(response));
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          "y1":results[0].y,
-          "y2":results[1].y,
-          "y3":results[2].y,
+          "y1":y1,
+          "y2":y2,
+          "y3":y3,
       }),
       };
 
       const verify = await fetch('http://localhost:8000/api/getproof', option);
-      let verify1 = await verify.json();
+      const verify1 = await verify.json();
 
-      let combI = 0;
-      
-      verify1 = JSON.parse(JSON.stringify(verify1));
-      if(verify1 == "true"){
-      combI = combine(shares,prime);
-      console.log(combI)}
-      else{
-        console.log("not verified")
-      }
+      const combI = combine(shares,prime);
+      console.log(combI)
 
       await snap.request({
         method: 'snap_dialog',
@@ -431,7 +407,7 @@ response = JSON.parse(JSON.stringify(response));
           type: 'Alert',
           content: panel([
             heading('Combined Secret'),
-            text(`Combined Secret: ${JSON.stringify(JSON.stringify(combI))}`),
+            text(`Combined Secret: ${JSON.stringify(verify1)}`),
           ]),
         },
       });
