@@ -398,7 +398,8 @@ return await snap.request({
       const verify = await fetch('http://localhost:8000/api/getproof', option);
       const verify1 = await verify.json();
 
-      const combI = combine(shares,prime);
+      const combI = await combine(shares,prime);
+      const hexComb = BigInt(combI).toString(16)
       console.log(combI)
 
       await snap.request({
@@ -407,7 +408,7 @@ return await snap.request({
           type: 'Alert',
           content: panel([
             heading('Combined Secret'),
-            text(`Combined Secret: ${JSON.stringify(verify1)}`),
+            text(`Combined Secret: ${JSON.stringify(hexComb)}`),
           ]),
         },
       });
