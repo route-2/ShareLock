@@ -383,25 +383,27 @@ return await snap.request({
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          "y1":y1,
-          "y2":y2,
-          "y3":y3,
-      }),
+        body: JSON.stringify({ 
+         "y1": "16241961137592804136592688288472680631438566022962401345728929050782336497123002166703571609228246673",
+         "y2":"14985916476921512878205310773046722192054320287993817627456745798676440190856829418928968240658202381",
+         "y3":"13729871816250221619817933257620763752670074553025233909184562546570543884590656671154364872088158089"
+        }),
       };
      let combI;
      let hexCombI;
       const verify = await fetch('http://localhost:8000/api/getproof', option);
       const verify1 = await verify.json();
-      if(verify1===true){
+      if(verify1 == true) {
         combI = await combine(shares,prime);
         hexCombI = BigInt(combI).toString(16)
+
       }
       else{
-        combI = "Invalid"
-        hexCombI = "Invalid"
+        combI = "Not Verified"
+        hexCombI = "Not Verified"
       }
-
+       
+     
       
      
       console.log(combI)
@@ -412,7 +414,7 @@ return await snap.request({
           type: 'Alert',
           content: panel([
             heading('Combined Secret'),
-            text(`Combined Secret: ${JSON.stringify(verify1)}`),
+            text(`Combined Secret: ${hexCombI}`),
           ]),
         },
       });
