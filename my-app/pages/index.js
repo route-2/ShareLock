@@ -22,6 +22,7 @@ export default function Home() {
   const[addr1,setAddr1]=useState('');
   const[addr2,setAddr2]=useState('');
   const[addr3,setAddr3]=useState('');
+  const[approval,setApproval] = useState("");
 
   
 
@@ -78,6 +79,21 @@ const account=(await provider.listAccounts())[0]
     
   };
 
+  const approvalCount = async () => {
+    const Count = await mpcContract.getApproval();
+    const approve = Count.toString();
+    setApproval(approve)
+    
+    console.log(approve)
+   
+    
+
+
+   }
+
+
+
+
   
 
 
@@ -119,12 +135,15 @@ const account=(await provider.listAccounts())[0]
       },
     });
   }
-
+console.log(approval)
   const proof = async () => {
-    if(await zkProof())
+    if( approval === 3)
     {
       combine();
 
+    }
+    else{
+      alert("Not enough approvals")
     }
   }
 
@@ -146,7 +165,7 @@ const account=(await provider.listAccounts())[0]
       <div className='flex flex-row items-center align-middle ' >
           <button className='bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>connectSnap()}>Install Snap</button>
           <button className='bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>callSnap()}> split </button>
-          <button className='bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>combine()}> combine </button>
+          <button className='bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>proof()}> combine </button>
           <ConnectButton />
         </div>
         
