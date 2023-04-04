@@ -53,6 +53,7 @@ const mpcContract = new ethers.Contract("0x29931323e11EC65De81cd6C1b5bCe64A13483
 
 
    }
+   approvalCount()
 
   
  

@@ -23,6 +23,7 @@ export default function Home() {
   const[addr2,setAddr2]=useState('');
   const[addr3,setAddr3]=useState('');
   const[approval,setApproval] = useState("");
+  console.log(approval)
 
   
 
@@ -90,6 +91,7 @@ const account=(await provider.listAccounts())[0]
 
 
    }
+   
 
 
 
@@ -125,6 +127,7 @@ const account=(await provider.listAccounts())[0]
   }
 
   const combine = async()=>{
+    
     await window.ethereum?.request({
       method:"wallet_invokeSnap",
       params:{
@@ -134,10 +137,14 @@ const account=(await provider.listAccounts())[0]
         },
       },
     });
+    await approvalCount()
   }
 console.log(approval)
+
   const proof = async () => {
-    if( approval === 3)
+    console.log(approval)
+   
+    if( approval == 3)
     {
       combine();
 
