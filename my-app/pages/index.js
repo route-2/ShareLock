@@ -1,111 +1,89 @@
-import Head from 'next/head'
-import React, { useState } from "react";
+import Head from "next/head";
+import React, { useState,useEffect } from "react";
 import * as PushAPI from "@pushprotocol/restapi";
 import { ethers } from "ethers";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import ABI from "../contracts/mpc.json"
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import ABI from "../contracts/mpc.json";
 // import zkProof from "../../zk1/src/index"
 
+import { Inter } from "next/font/google";
+import { useProvider, useSigner } from "wagmi";
 
-
-
-
-import { Inter } from 'next/font/google'
-import { useProvider, useSigner } from 'wagmi';
- 
-
-
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-
-  const[addr1,setAddr1]=useState('');
-  const[addr2,setAddr2]=useState('');
-  const[addr3,setAddr3]=useState('');
-  const[approval,setApproval] = useState("");
-  console.log(approval)
-
-  
-
+  const [addr1, setAddr1] = useState("");
+  const [addr2, setAddr2] = useState("");
+  const [addr3, setAddr3] = useState("");
+  const [approval, setApproval] = useState("");
+  console.log(approval);
 
   const defaultSnapOrigin = `local:http://localhost:8080`;
   const [formData, setFormData] = useState({});
-   // channel private key
-   
-  
+  // channel private key
+
   const provider = useProvider();
-  const {data:signer} = useSigner();
-  console.log(signer)
-   
+  const { data: signer } = useSigner();
+  console.log(signer);
 
-   const mpcContract = new ethers.Contract("0x29931323e11EC65De81cd6C1b5bCe64A13483D9e",ABI,signer)
-   console.log(mpcContract)
+  const mpcContract = new ethers.Contract(
+    "0x6A4d4F85EF6E3F479Cd80b310E0B767ed8623197",
+    ABI,
+    signer
+  );
+  console.log(mpcContract);
 
+  useEffect(() => {
+    approvalCount()
 
-const sendNotification = async() => {
-  const Pkey = `0x4d31dd75de7e5c056250e47f48370d96632246a81f7650b651571da85510d2f0`;
-const _signer = new ethers.Wallet(Pkey);
- 
-const account=(await provider.listAccounts())[0]
-   console.log(account)
+  })
 
-  const apiResponse = await PushAPI.payloads.sendNotification({
-    signer: _signer,
-    type: 3, // target
-    identityType: 2, // direct payload
-    notification: {
-      title: `Recovery`,
-      body: `Approve with your part of the share!`
-    },
-    payload: {
-      title: `Enter your part of the share!`,
-      body: `Recovery for the PVT key`,
-      cta: '',
-      img: ''
-    },
-    recipients: `eip155:5:0x050F40Aa40C72f77AF60c9Aaf56cE9d36550AF70`, // recipient address
-    channel: 'eip155:5:0xAa152e5a07204ad8703eC5A716E329d6bC208aDd', // your channel address
-    env: 'staging'
-  });
-  console.log(apiResponse)
-  
+  const sendNotification = async () => {
+    const Pkey = `0x4d31dd75de7e5c056250e47f48370d96632246a81f7650b651571da85510d2f0`;
+    const _signer = new ethers.Wallet(Pkey);
 
-}
+    const account = (await provider.listAccounts())[0];
+    console.log(account);
+
+    const apiResponse = await PushAPI.payloads.sendNotification({
+      signer: _signer,
+      type: 3, // target
+      identityType: 2, // direct payload
+      notification: {
+        title: `Recovery`,
+        body: `Approve with your part of the share!`,
+      },
+      payload: {
+        title: `Enter your part of the share!`,
+        body: `Recovery for the PVT key`,
+        cta: "",
+        img: "",
+      },
+      recipients: `eip155:5:0x050F40Aa40C72f77AF60c9Aaf56cE9d36550AF70`, // recipient address
+      channel: "eip155:5:0xAa152e5a07204ad8703eC5A716E329d6bC208aDd", // your channel address
+      env: "staging",
+    });
+    console.log(apiResponse);
+  };
 
   const handleInputChange = async (event) => {
-   
-    await mpcContract.ownerInput([ethers.utils.getAddress(addr1),ethers.utils.getAddress(addr2),ethers.utils.getAddress(addr3)]);
-
-    
-    
+    await mpcContract.ownerInput([
+      ethers.utils.getAddress(addr1),
+      ethers.utils.getAddress(addr2),
+      ethers.utils.getAddress(addr3),
+    ]);
   };
 
   const approvalCount = async () => {
     const Count = await mpcContract.getApproval();
-    const approve = Count.toString();
-    setApproval(approve)
-    
-    console.log(approve)
-   
-    
+    const approve = await Count.toString();
+    setApproval(approve);
 
+    console.log(approve);
+  };
+  approvalCount()
 
-   }
-   
-
-
-
-
-  
-
-
- 
-
-
-  const connectSnap = async (
-    snapId = defaultSnapOrigin,
-    params = {}
-  ) => {
+  const connectSnap = async (snapId = defaultSnapOrigin, params = {}) => {
     await window.ethereum?.request({
       method: "wallet_requestSnaps",
       params: {
@@ -114,143 +92,166 @@ const account=(await provider.listAccounts())[0]
     });
   };
 
-  const callSnap = async()=>{
+  const callSnap = async () => {
     await window.ethereum?.request({
-      method:"wallet_invokeSnap",
-      params:{
-        snapId : defaultSnapOrigin,
-        request:{
-          method:"split",
+      method: "wallet_invokeSnap",
+      params: {
+        snapId: defaultSnapOrigin,
+        request: {
+          method: "split",
         },
       },
     });
-  }
+  };
 
-  const combine = async()=>{
-    
+  const combine = async () => {
     await window.ethereum?.request({
-      method:"wallet_invokeSnap",
-      params:{
-        snapId : defaultSnapOrigin,
-        request:{
-          method:"combine",
+      method: "wallet_invokeSnap",
+      params: {
+        snapId: defaultSnapOrigin,
+        request: {
+          method: "combine",
         },
       },
     });
-    await approvalCount()
-  }
-console.log(approval)
+    await approvalCount();
+  };
+  console.log(approval);
 
   const proof = async () => {
-    console.log(approval)
-   
-    if( approval == 3)
-    {
+    console.log(approval);
+
+    if (approval == 3) {
       combine();
-
+      
+    } else {
+      alert("Not enough approvals");
+      
     }
-    else{
-      alert("Not enough approvals")
-    }
-  }
-
-
-
-
-
+  };
 
   return (
     <>
       <Head>
-       
         <meta name="description" content="Generated by create next app" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-        <link href="/dist/output.css" rel="stylesheet"/>
+        <link href="/dist/output.css" rel="stylesheet" />
       </Head>
-      
-      <div className='flex flex-row items-center align-middle ' >
-          <button className='bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>connectSnap()}>Install Snap</button>
-          <button className='bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>callSnap()}> split </button>
-          <button className='bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl' onClick={()=>proof()}> combine </button>
-          <ConnectButton />
+
+      <div className="flex flex-row items-center align-middle ">
+        <button
+          className="bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl"
+          onClick={() => connectSnap()}
+        >
+          Install Snap
+        </button>
+        <button
+          className="bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl"
+          onClick={() => callSnap()}
+        >
+          {" "}
+          split{" "}
+        </button>
+        <button
+          className="bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl"
+          onClick={() => proof()}
+        >
+          {" "}
+          combine{" "}
+        </button>
+        <ConnectButton />
+      </div>
+
+      <div class="grid grid-cols-3 gap-4 justify-items-stretch h-72">
+        <div class="text-gray-700  flex justify-center items-center px-4 py-2"></div>
+        <div class="justify-self-center shadow-2xl rounded-lg text-gray-800 flex justify-center items-center px-4 py-2">
+          <form class="w-full max-w-sm content-center">
+            <div class="md:flex md:items-center mb-6">
+              <div class="md:w-1/3">
+                <label
+                  class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                  for="inline-full-name"
+                >
+                  Guardian Wallet 1
+                </label>
+              </div>
+              <div class="md:w-2/3">
+                <input
+                  class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                  type="text"
+                  placeholder="Address"
+                  id="guardianWallet1"
+                  onChange={(e) => setAddr1(e.target.value)}
+                />
+              </div>
+            </div>
+            <div class="md:flex md:items-center mb-6">
+              <div class="md:w-1/3">
+                <label
+                  class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                  for="inline-password"
+                >
+                  Guardian Wallet 2
+                </label>
+              </div>
+              <div class="md:w-2/3">
+                <input
+                  class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                  type="text"
+                  placeholder="Address"
+                  id="guardianWallet2"
+                  onChange={(e) => setAddr2(e.target.value)}
+                />
+              </div>
+            </div>
+            <div class="md:flex md:items-center mb-6">
+              <div class="md:w-1/3">
+                <label
+                  class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                  for="inline-password"
+                >
+                  Guardian Wallet 3
+                </label>
+              </div>
+              <div class="md:w-2/3">
+                <input
+                  class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                  type="text"
+                  placeholder="Address"
+                  id="guardianWallet3"
+                  onChange={(e) => setAddr3(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div class="md:flex md:items-center">
+              <div class="md:w-1/3"></div>
+              <div class="md:w-2/3">
+                <button
+                  class="shadow bg-black hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                  type="button"
+                  onClick={handleInputChange}
+                >
+                  Sign Up
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
-        
-
-
-
-<div class="grid grid-cols-3 gap-4 justify-items-stretch h-72">
-  <div class="text-gray-700  flex justify-center items-center px-4 py-2"> 
-  
-  </div>
-  <div class="justify-self-center shadow-2xl rounded-lg text-gray-800 flex justify-center items-center px-4 py-2">  
-  
-  <form class="w-full max-w-sm content-center">
-  <div class="md:flex md:items-center mb-6">
-    <div class="md:w-1/3">
-      <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
-        Guardian Wallet 1
-      </label>
-    </div>
-    <div class="md:w-2/3">
-      <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"  type="text" placeholder="Address" id="guardianWallet1"
-           
-            onChange={(e)=>setAddr1(e.target.value)}/>
-    </div>
-  </div>
-  <div class="md:flex md:items-center mb-6">
-    <div class="md:w-1/3">
-      <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-password">
-      Guardian Wallet 2
-      </label>
-    </div>
-    <div class="md:w-2/3">
-    <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"  type="text" placeholder="Address"  id="guardianWallet2"
-           
-           
-            onChange={(e)=>setAddr2(e.target.value)}/>
-      
-    </div>
-  </div>
-  <div class="md:flex md:items-center mb-6">
-    <div class="md:w-1/3">
-      <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-password">
-      Guardian Wallet 3
-      </label>
-    </div>
-    <div class="md:w-2/3">
-    <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"  type="text" placeholder="Address" id="guardianWallet3"
-           
-            onChange={(e)=>setAddr3(e.target.value)}/>
-      
-    </div>
-  </div>
-  
-  <div class="md:flex md:items-center">
-    <div class="md:w-1/3"></div>
-    <div class="md:w-2/3">
-      <button class="shadow bg-black hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button" onClick={handleInputChange}>
-        Sign Up
-      </button>
-    </div>
-  </div>
- 
-
-</form>
-  </div>
- 
-  
-</div>
- <div class="md:flex mt-6 ml-44 md:items-center">
-    <div class="md:w-1/3"></div>
-    <div class="md:w-2/3">
-      <button class="shadow  hover:bg-gray-400 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-4 rounded" type="button" onClick={sendNotification}>
-      Forgot Password?
-      </button>
-    </div>
-  </div>
-
-
+      </div>
+      <div class="md:flex mt-6 ml-44 md:items-center">
+        <div class="md:w-1/3"></div>
+        <div class="md:w-2/3">
+          <button
+            class="shadow  hover:bg-gray-400 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-4 rounded"
+            type="button"
+            onClick={sendNotification}
+          >
+            Forgot Password?
+          </button>
+        </div>
+      </div>
     </>
-  )
+  );
 }

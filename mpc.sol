@@ -6,6 +6,8 @@ pragma solidity >=0.7.0 <0.9.0;
 contract mpc {
   mapping(address => bool) public isOwner;
   mapping(address => bool) public approved;
+  mapping(address => bool) private hasApproved;
+  mapping(address => uint256) private lastApprovedAt;
   event Addowner(address[] indexed guardianWallet);
 
   address[] public owners;
@@ -38,8 +40,13 @@ contract mpc {
   }
    function setApproval(address guardian) public {
      
-        approved[guardian]=true;
-        counter++;
+       require(!hasApproved[guardian], "guardian already approved");
+  require(block.timestamp >= lastApprovedAt[guardian] + 10 minutes, "guardian needs to wait before approving again");
+
+  approved[guardian] = true;
+  hasApproved[guardian] = true;
+  lastApprovedAt[guardian] = block.timestamp;
+  counter++;
 
     }
     function getApproval() public view returns (uint) {
@@ -48,19 +55,28 @@ contract mpc {
     function clearApproval() public {
       require(counter == 3, "Didn't get all approvals yet!" );
       counter = 0;
+      // iterate through all guardians and clear their hasApproved mapping
+    for (uint i = 0; i < owners.length; i++) {
+      address guardian = owners[i];
+      if (hasApproved[guardian] && block.timestamp >= lastApprovedAt[guardian] + 10 minutes) {
+        hasApproved[guardian] = false;
+      }
     }
+
+    }
+    
 
 
   function getOwners() public view returns (address[] memory) {
     return owners;
   }
-
-  function clearOwners() public {
+   function clearOwners() public {
    
 
     for (uint i = 0; i < owners.length; i++) {
       address owner = owners[i];
       isOwner[owner] = false;
+
     }
 
     delete owners;
