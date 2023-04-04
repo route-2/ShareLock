@@ -274,9 +274,9 @@ export default function Home() {
 
   
 </div>
- <footer class="bg-white text-center text-black mt-28">
-  <div class="container px-6 pt-6">
-    <div class="mb-6 flex justify-center">
+ <footer class="fixed bottom-0 w-full bg-white text-white py-4  ">
+  <div class="container top-[100vh] px-6 pt-6 ">
+    <div class=" flex justify-center">
       
 
       <a
