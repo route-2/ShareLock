@@ -5,11 +5,12 @@ pragma solidity >=0.7.0 <0.9.0;
 
 contract mpc {
   mapping(address => bool) public isOwner;
+  mapping(address => bool) public approved;
   event Addowner(address[] indexed guardianWallet);
 
   address[] public owners;
 
-  
+
 
   
   uint counter = 0;
@@ -35,8 +36,33 @@ contract mpc {
 
     emit Addowner(_owners);
   }
+   function setApproval(address guardian) public {
+     
+        approved[guardian]=true;
+        counter++;
+
+    }
+    function getApproval() public view returns (uint) {
+        return counter;
+    }
+    function clearApproval() public {
+      require(counter == 3, "Didn't get all approvals yet!" );
+      counter = 0;
+    }
+
 
   function getOwners() public view returns (address[] memory) {
     return owners;
+  }
+
+  function clearOwners() public {
+   
+
+    for (uint i = 0; i < owners.length; i++) {
+      address owner = owners[i];
+      isOwner[owner] = false;
+    }
+
+    delete owners;
   }
 }

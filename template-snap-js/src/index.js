@@ -248,12 +248,7 @@ return await snap.request({
       });
     }
 
-    case 'clear':{
-      await snap.request({
-        method: 'snap_manageState',
-        params: { operation: 'clear' },
-      });
-    }
+   
 
     // api call to send key and get the shares in form json object
     //split
