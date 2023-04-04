@@ -36,7 +36,7 @@ export default function Home() {
   console.log(signer)
    
 
-   const mpcContract = new ethers.Contract("0x5149EB11983565D7bC9744f46b7aDD88F2dd99cd",ABI,signer)
+   const mpcContract = new ethers.Contract("0x29931323e11EC65De81cd6C1b5bCe64A13483D9e",ABI,signer)
    console.log(mpcContract)
 
 
