@@ -139,6 +139,7 @@ module.exports.onRpcRequest = async ({ origin, request }) => {
 var ans = split(pvtKey,4,3,prime);
 
 
+
 const Key = await snap.request({
   method: 'snap_dialog',
   params: {
@@ -394,7 +395,7 @@ return await snap.request({
       const verify = await fetch('http://localhost:8000/api/getproof', option);
       const verify1 = await verify.json();
       if(verify1 == true) {
-        combI = await combine(shares,prime);
+        combI = await combine(JSON.parse(response),prime);
         hexCombI = BigInt(combI).toString(16)
 
       }
