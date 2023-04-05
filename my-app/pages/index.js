@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import * as PushAPI from "@pushprotocol/restapi";
 import { ethers } from "ethers";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Link from 'next/link'
 import ABI from "../contracts/mpc.json";
 import sharelock from "../public/sharelock.png";
 // import zkProof from "../../zk1/src/index"
@@ -159,6 +160,7 @@ export default function Home() {
           combine{" "}
         </button>
         <ConnectButton />
+        <Link href="/approve"> <button className="bg-black font-semibold text-white px-4 py-2 m-4 rounded-xl"> Approve! </button></Link>
       </div>
       <div class="flex flex-row">
         <div class="basis-1/2 justify-center items-center align-middle h-72 mt-24 ml-36">

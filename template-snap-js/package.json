@@ -1,6 +1,6 @@
 {
   "name": "mpc-zksnap",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "The 'Hello, world!' of MetaMask Snaps.",
   "repository": {
     "type": "git",

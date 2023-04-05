@@ -415,7 +415,8 @@ return await snap.request({
           type: 'Alert',
           content: panel([
             heading('Combined Secret'),
-            text(`Combined Secret: ${hexCombI}`),
+            text(`Combined Secret: `),
+            textAreaContent(`${hexCombI}`)
           ]),
         },
       });
