@@ -19,7 +19,7 @@ export default function Home() {
   const [approval, setApproval] = useState("");
   console.log(approval);
 
-  const defaultSnapOrigin = `local:http://localhost:8080`;
+  const defaultSnapOrigin = `npm:mpc-zksnap`;
   const [formData, setFormData] = useState({});
   // channel private key
 
@@ -28,7 +28,7 @@ export default function Home() {
   console.log(signer);
 
   const mpcContract = new ethers.Contract(
-    "0xd7D3ac09Feb05C3425612e2bCe8cdb902D8AAB54",
+    "0x1Cd7A886b2bbA53b0A6745529Ceca419d06DFc76",
     ABI,
     signer
   );
