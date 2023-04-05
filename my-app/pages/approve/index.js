@@ -16,7 +16,7 @@ export default function Approve() {
   const [approval, setApproval] = useState("");
 
   const mpcContract = new ethers.Contract(
-    "0x3Dac5387db62696ae8b0BEB80518E8C025eeb7D4",
+    "0xd7D3ac09Feb05C3425612e2bCe8cdb902D8AAB54",
     ABI,
     signer
   );
