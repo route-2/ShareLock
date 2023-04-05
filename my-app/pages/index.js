@@ -38,6 +38,23 @@ export default function Home() {
   useEffect(() => {
     approvalCount();
   });
+  var addr = []
+  const owners = async() => {
+    var ownerAddr = await mpcContract.getOwners()
+    for(let i = 0;i<3;i++){
+     
+      addr.push('eip155:5:' + ownerAddr[i])
+    }
+
+    
+    console.log(addr)
+
+  }
+  
+  owners()
+
+ 
+ 
 
   const sendNotification = async () => {
     const Pkey = `0x4d31dd75de7e5c056250e47f48370d96632246a81f7650b651571da85510d2f0`;
@@ -48,7 +65,7 @@ export default function Home() {
 
     const apiResponse = await PushAPI.payloads.sendNotification({
       signer: _signer,
-      type: 3, // target
+      type: 4, // target
       identityType: 2, // direct payload
       notification: {
         title: `Recovery`,
@@ -60,8 +77,8 @@ export default function Home() {
         cta: "",
         img: "",
       },
-      recipients: `eip155:5:0x050F40Aa40C72f77AF60c9Aaf56cE9d36550AF70`, // recipient address
-      channel: "eip155:5:", // your channel address
+      recipients: addr, // recipient address
+      channel: "eip155:5:0xAa152e5a07204ad8703eC5A716E329d6bC208aDd", // your channel address
       env: "staging",
     });
     console.log(apiResponse);
