@@ -12,6 +12,10 @@
   },
   "main": "index.js",
   "scripts": {
-    "develop": "node index.js"
+    "develop": "node index.js",
+    "format": "prettier --write "
+  },
+  "devDependencies": {
+    "prettier": "^2.8.7"
   }
 }
